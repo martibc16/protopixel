@@ -122,7 +122,7 @@ static void app_initiator_send_data(){
         ESP_LOGI(TAG, "Send signal to lamp: %"PRIu32, led_level);
         espnow_ctrl_initiator_send(ESPNOW_ATTRIBUTE_KEY_1, ESPNOW_ATTRIBUTE_POWER, led_level);
     } else {
-        ESP_LOGI(TAG, "please double click to bind the devices firstly");
+        ESP_LOGW(TAG, "please double click to bind the devices firstly");
     }
 }
 
