@@ -108,7 +108,8 @@ static void app_led_init(void)
 void app_led_set_level(uint8_t brightness)
 {
     //By changing the duty cycle we control the brightness
-    ledc_set_duty(LEDC_MODE, LEDC_CHANNEL, brightness);
+    //Duty resolution is 13 bits. So 100% duty cycle corresponds to 2^13=8192
+    ledc_set_duty(LEDC_MODE, LEDC_CHANNEL, (uint32_t)(brightness*8192/100));
     ESP_ERROR_CHECK(ledc_update_duty(LEDC_MODE, LEDC_CHANNEL));
 }
 
@@ -132,7 +133,7 @@ static void app_initiator_send_press_cb(void *arg, void *usr_data)
     if(led_level > 0)
         led_level = 0;
     else
-        led_level=255;
+        led_level=100;
 
     app_initiator_send_data();
 }
@@ -143,11 +144,11 @@ static void app_initiator_long_press_cb(void *arg, void *usr_data){
 
     ESP_ERROR_CHECK(!(BUTTON_LONG_PRESS_HOLD == iot_button_get_event(arg)));
 
-    led_level += (direction * 20);
+    led_level += (direction * 8);
 
-    if (led_level > 255) {
+    if (led_level > 100) {
         direction = -1;  // Start decreasing
-        led_level = 255;
+        led_level = 100;
     } else if (led_level < 0) {
         direction = 1;   // Start increasing
         led_level = 0;
