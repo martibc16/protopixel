@@ -1,4 +1,3 @@
 .pio/
 .vscode/
-protopixel_lamp/managed_components/
-protopixel_switch/managed_components/
+managed_components/
